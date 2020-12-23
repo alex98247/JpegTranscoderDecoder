@@ -382,36 +382,10 @@ namespace JpegTranscoderDecoder
 
             // Encode 8x8 macroblocks
             int ofsG = comp > 1 ? 1 : 0, ofsB = comp > 1 ? 2 : 0;
-            //byte[] dataR = data;
             int DCY = 0, DCU = 0, DCV = 0;
             int bitBuf = 0, bitCnt = 0;
             if (subsample != 0)
             {
-                //    for (int y = 0; y < height; y += 16)
-                //    {
-                //        for (int x = 0; x < width; x += 16)
-                //        {
-                //float[] Y = new float[256];
-                //float[] U = new float[256];
-                //float[] V = new float[256];
-                //for (int row = y, pos = 0; row < y + 16; ++row)
-                //{
-                //    for (int col = x; col < x + 16; ++col, ++pos)
-                //    {
-                //        int prow = row >= height ? height - 1 : row;
-                //        int pcol = col >= width ? width - 1 : col;
-                //        int p = prow * width * comp + pcol * comp;
-                //        float r = dataR[p], g = dataR[p + ofsG], b = dataR[p + ofsB];
-                //        Y[pos] = +0.29900f * r + 0.58700f * g + 0.11400f * b - 128;
-                //        U[pos] = -0.16874f * r - 0.33126f * g + 0.50000f * b;
-                //        V[pos] = +0.50000f * r - 0.41869f * g - 0.08131f * b;
-                //    }
-                //}
-
-                //            DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, Y, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT, 0);
-                //            DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, Y, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT, 8);
-                //            DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, Y, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT, 128);
-                //            DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, Y, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT, 136);
                 for (int i = 0; i < data.Length; i += 6)
                 {
                     DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i], 8, fdtbl_Y, DCY, YDC_HT, YAC_HT, 0);
@@ -421,57 +395,15 @@ namespace JpegTranscoderDecoder
                     DCU = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i + 4], 8, fdtbl_UV, DCU, UVDC_HT, UVAC_HT, 0);
                     DCV = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i + 5], 8, fdtbl_UV, DCV, UVDC_HT, UVAC_HT, 0);
                 }
-                //            // subsample U,V
-                //            float[] subU = new float[64];
-                //            float[] subV = new float[64];
-                //            for (int yy = 0, pos = 0; yy < 8; ++yy)
-                //            {
-                //                for (int xx = 0; xx < 8; ++xx, ++pos)
-                //                {
-                //                    int j = yy * 32 + xx * 2;
-                //                    subU[pos] = (U[j + 0] + U[j + 1] + U[j + 16] + U[j + 17]) * 0.25f;
-                //                    subV[pos] = (V[j + 0] + V[j + 1] + V[j + 16] + V[j + 17]) * 0.25f;
-                //                }
-                //            }
-
-                //            DCU = jo_processDU(fp, ref bitBuf, ref bitCnt, ref subU, 8, fdtbl_UV, DCU, UVDC_HT, UVAC_HT, 0);
-                //            DCV = jo_processDU(fp, ref bitBuf, ref bitCnt, ref subV, 8, fdtbl_UV, DCV, UVDC_HT, UVAC_HT, 0);
-                //        }
-                //    }
             }
             else
             {
-                //for (int y = 0; y < height; y += 8)
-                //{
-                    //for (int x = 0; x < width; x += 8)
-                    //{
-                    //    float[] Y = new float[64];
-                    //    float[] U = new float[64];
-                    //    float[] V = new float[64];
-                    //    for (int row = y, pos = 0; row < y + 8; ++row)
-                    //    {
-                    //        for (int col = x; col < x + 8; ++col, ++pos)
-                    //        {
-                    //            int prow = row >= height ? height - 1 : row;
-                    //            int pcol = col >= width ? width - 1 : col;
-                    //            int p = prow * width * comp + pcol * comp;
-                    //            float r = dataR[p], g = dataR[p + ofsG], b = dataR[p + ofsB];
-                    //            Y[pos] = +0.29900f * r + 0.58700f * g + 0.11400f * b - 128;
-                    //            U[pos] = -0.16874f * r - 0.33126f * g + 0.50000f * b;
-                    //            V[pos] = +0.50000f * r - 0.41869f * g - 0.08131f * b;
-                    //        }
-                    //    }
-                    for (int i = 0; i < data.Length; i+=3)
-                    {
+                for (int i = 0; i < data.Length; i += 3)
+                {
                     DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i], 8, fdtbl_Y, DCY, YDC_HT, YAC_HT, 0);
-                    //DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i+1], 8, fdtbl_Y, DCY, YDC_HT, YAC_HT, 8);
-                    //DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i+2], 8, fdtbl_Y, DCY, YDC_HT, YAC_HT, 128);
-                   // DCY = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i+3], 8, fdtbl_Y, DCY, YDC_HT, YAC_HT, 136);
-                    DCU = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i+1], 8, fdtbl_UV, DCU, UVDC_HT, UVAC_HT, 0);
-                    DCV = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i+2], 8, fdtbl_UV, DCV, UVDC_HT, UVAC_HT, 0);
+                    DCU = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i + 1], 8, fdtbl_UV, DCU, UVDC_HT, UVAC_HT, 0);
+                    DCV = jo_processDU(fp, ref bitBuf, ref bitCnt, data[i + 2], 8, fdtbl_UV, DCV, UVDC_HT, UVAC_HT, 0);
                 }
-                    //}
-                //}
             }
 
             // Do the bit alignment of the EOI marker
